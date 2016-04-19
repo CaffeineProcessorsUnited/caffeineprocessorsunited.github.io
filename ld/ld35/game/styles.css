@@ -1,0 +1,24 @@
+canvas {
+	cursor: default;
+	outline: none;
+}
+
+body {
+	background-color: #333333;
+	color: #FF50A2;
+}
+
+h1 {
+	margin-bottom: 0px;
+}
+
+.small, .small:link, .small:visited {
+	font-size: 12px;
+	color: #AAAAAA;
+	text-decoration: none;
+}
+
+.small:active, .small:hover {
+	color: #FF50A2;
+}
+
