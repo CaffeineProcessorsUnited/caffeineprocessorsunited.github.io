@@ -6,7 +6,7 @@ html,
 body {
   width: 100%;
   background-color: #333333;
-  color: #aaaaaa;
+  color: #AAAAAA;
   height: 100%;
   font-family: sans-serif;
   font-size: 14px;
@@ -20,12 +20,12 @@ h1 {
 a,
 a:link,
 a:visited {
-  color: #2cb6cc;
+  color: #2CB6CC;
   text-decoration: none;
 }
 a:active,
 a:hover {
-  color: #ff50a2;
+  color: #FF50A2;
 }
 #page > .header {
   box-sizing: border-box;
@@ -38,7 +38,7 @@ a:hover {
   line-height: 60px;
   vertical-align: middle;
   background-color: #000000;
-  border-bottom: 4px solid #2cb6cc;
+  border-bottom: 4px solid #2CB6CC;
 }
 #page > .header .content {
   margin: 0px auto;
@@ -59,7 +59,10 @@ a:hover {
   border-bottom: 4px solid transparent;
 }
 #page > .header .content .brand:hover {
-  border-bottom: 4px solid #ff50a2;
+  border-bottom: 4px solid #FF50A2;
+}
+#page > .header .content .brand:hover img {
+  transform: scale(1.05, 1.05);
 }
 #page > .header .content .brand a,
 #page > .header .content .brand img {
@@ -96,13 +99,13 @@ a:hover {
 #page > .header .content ul.nav li:hover a:active,
 #page > .header .content ul.nav li.active a:hover,
 #page > .header .content ul.nav li:hover a:hover {
-  color: #ff50a2;
+  color: #FF50A2;
 }
 #page > .header .content ul.nav li.active {
-  border-bottom: 4px solid #ffffff;
+  border-bottom: 4px solid #FFFFFF;
 }
 #page > .header .content ul.nav li:hover {
-  border-bottom: 4px solid #ff50a2;
+  border-bottom: 4px solid #FF50A2;
 }
 #page > .header .content ul.nav li a {
   font-size: 18.2px;
@@ -128,11 +131,60 @@ a:hover {
   text-align: left;
 }
 #page > .content .highlight {
-  color: #ffffff;
+  color: #FFFFFF;
 }
 #page > .footer {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
   margin: 0px auto;
   min-width: 500px;
   width: 80%;
+  padding-left: 10px;
+  padding-right: 10px;
   height: 80px;
+  background-color: #000000;
+  border-top: 4px solid #2CB6CC;
+  border-left: 4px solid #2CB6CC;
+  border-right: 4px solid #2CB6CC;
+  border-top-right-radius: 0px;
+  border-top-left-radius: 0px;
+}
+#page > .footer ul.footer_links {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: 0;
+  list-style-type: none;
+  height: 80px;
+}
+#page > .footer ul.footer_links li {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  font-size: 14px;
+  display: inline-block;
+  vertical-align: middle;
+  height: 100%;
+}
+#page > .footer ul.footer_links li.active,
+#page > .footer ul.footer_links li:hover {
+  background-color: #333333;
+}
+#page > .footer ul.footer_links li.active a,
+#page > .footer ul.footer_links li:hover a,
+#page > .footer ul.footer_links li.active a:link,
+#page > .footer ul.footer_links li:hover a:link,
+#page > .footer ul.footer_links li.active a:visited,
+#page > .footer ul.footer_links li:hover a:visited,
+#page > .footer ul.footer_links li.active a:active,
+#page > .footer ul.footer_links li:hover a:active,
+#page > .footer ul.footer_links li.active a:hover,
+#page > .footer ul.footer_links li:hover a:hover {
+  color: #FF50A2;
+}
+#page > .footer ul.footer_links li a {
+  font-size: 18.2px;
+  font-weight: bold;
+  margin: 0px 20px;
 }
