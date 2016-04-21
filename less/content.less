@@ -1,0 +1,21 @@
+@import (once) "variables.less";
+
+.content() {
+  .page-width();
+  min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin-bottom: -80px;
+  &::before {
+    display: block;
+    content: "";
+    height: 80px;
+  }
+  & > span {
+    display: inline-block;
+    text-align: left;
+  }
+  .highlight {
+    color: @color-bright;
+  }
+}
