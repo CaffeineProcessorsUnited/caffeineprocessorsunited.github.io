@@ -1,54 +1,37 @@
+// "main":"main.less"
 @import (once) "variables.less";
 
 .footer() {
-  box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-  .page-width();
-  @border_radius: 0px;
-  padding-left: 10px;
-  padding-right: 10px;
+  width: 100%;
   height: @footer-height;
-  background-color: @header-background-color;
+  background-color: @background-color-dark;
+  /*
   border-top: @header-border-width solid @brand-primary;
   border-left: @header-border-width solid @brand-primary;
   border-right: @header-border-width solid @brand-primary;
   border-top-right-radius: @border_radius;
   border-top-left-radius: @border_radius;
-
+  */
+  .content {
+    box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+    .page-width();
+    padding: 5px;
+  }
   ul.links {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    font-size: 0;
     list-style-type: none;
-    height: @footer-height;
-    li {
-      box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-      font-size: @font-size;
-      display: inline-block;
-      vertical-align: middle;
-      height: 100%;
-      &.active,
-      &:hover {
-        background-color: @background-color;
-        a, a:link, a:visited, a:active, a:hover {
-          color: @brand-accent;
-        }
+    a {
+      &, &:link, &:visited {
+        color: @color-dark;
       }
-      &.active {
-
+      &:active, &:hover {
+        color: @brand-accent;
       }
-      &:hover {
-
-      }
-      a {
-        font-size: @header-li-font-size;
-        font-weight: @header-li-font-weight;
-        margin: 0px 20px;
-      }
+    }
+    .love {
+      width: 100%;
+      text-align: center;
     }
   }
 }
