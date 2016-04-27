@@ -2,6 +2,7 @@
 @import (once) "variables.less";
 
 .footer() {
+  display: table;
   width: 100%;
   height: @footer-height;
   background-color: @background-color-dark;
@@ -9,9 +10,15 @@
   border-top: @footer-border-width solid @brand-primary;
   overflow: hidden;
   .content {
+    display: table-cell;
+    vertical-align: middle;
     .box-sizing(border-box);
     .page-width();
-    padding: 5px;
+    max-height: 100%;
+    padding: 2px;
+  }
+  .row {
+    margin: 4px 0px;
   }
   ul.links {
     list-style-type: none;
