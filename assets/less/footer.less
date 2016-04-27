@@ -5,17 +5,11 @@
   width: 100%;
   height: @footer-height;
   background-color: @background-color-dark;
-  /*
-  border-top: @header-border-width solid @brand-primary;
-  border-left: @header-border-width solid @brand-primary;
-  border-right: @header-border-width solid @brand-primary;
-  border-top-right-radius: @border_radius;
-  border-top-left-radius: @border_radius;
-  */
+  .box-sizing(border-box);
+  border-top: @footer-border-width solid @brand-primary;
+  overflow: hidden;
   .content {
-    box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      -webkit-box-sizing: border-box;
+    .box-sizing(border-box);
     .page-width();
     padding: 5px;
   }
