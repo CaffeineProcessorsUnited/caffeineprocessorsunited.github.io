@@ -57,7 +57,7 @@
       .col(@n, @i: 1) when (@i <= @n) {
         .col.col-@{i} {
           width: (100% / @n * @i);
-          min-width: @page-width / @n * @i;
+          min-width: min(@page-min-width / 2, @page-max-width / @n * @i);
         }
         .col(@n, (@i + 1));
       }

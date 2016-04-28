@@ -199,7 +199,7 @@ a:hover {
   min-height: 100%;
   height: auto !important;
   height: 100%;
-  margin-bottom: -80px;
+  margin-bottom: -100px;
   text-align: left;
 }
 #page > .content::before {
@@ -217,7 +217,7 @@ a:hover {
 #page > .footer {
   display: table;
   width: 100%;
-  height: 80px;
+  height: 100px;
   background-color: #0a0b0d;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -226,7 +226,7 @@ a:hover {
   overflow: hidden;
 }
 #page > .footer .content {
-  display: table-cell;
+  display: table;
   vertical-align: middle;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -237,24 +237,27 @@ a:hover {
   max-width: 1200px;
   width: 100%;
   max-height: 100%;
-  padding: 2px;
+  padding: 2px 0px;
+  color: #777777;
+  overflow: hidden;
 }
-#page > .footer .row {
-  margin: 4px 0px;
+#page > .footer .col {
+  margin-top: 3px;
+  margin-bottom: 3px;
 }
-#page > .footer ul.links {
+#page > .footer .links {
   list-style-type: none;
 }
-#page > .footer ul.links a,
-#page > .footer ul.links a:link,
-#page > .footer ul.links a:visited {
+#page > .footer .links a,
+#page > .footer .links a:link,
+#page > .footer .links a:visited {
   color: #777777;
 }
-#page > .footer ul.links a:active,
-#page > .footer ul.links a:hover {
+#page > .footer .links a:active,
+#page > .footer .links a:hover {
   color: #E77817;
 }
-#page > .footer ul.links .love {
+#page > .footer .links .love {
   width: 100%;
   text-align: center;
 }
@@ -506,62 +509,62 @@ a:hover {
 .grid.row .col.col-1,
 .grid .row .col.col-1 {
   width: 8.33333333%;
-  min-width: 8.33333333%;
+  min-width: 100px;
 }
 .grid.row .col.col-2,
 .grid .row .col.col-2 {
   width: 16.66666667%;
-  min-width: 16.66666667%;
+  min-width: 200px;
 }
 .grid.row .col.col-3,
 .grid .row .col.col-3 {
   width: 25%;
-  min-width: 25%;
+  min-width: 250px;
 }
 .grid.row .col.col-4,
 .grid .row .col.col-4 {
   width: 33.33333333%;
-  min-width: 33.33333333%;
+  min-width: 250px;
 }
 .grid.row .col.col-5,
 .grid .row .col.col-5 {
   width: 41.66666667%;
-  min-width: 41.66666667%;
+  min-width: 250px;
 }
 .grid.row .col.col-6,
 .grid .row .col.col-6 {
   width: 50%;
-  min-width: 50%;
+  min-width: 250px;
 }
 .grid.row .col.col-7,
 .grid .row .col.col-7 {
   width: 58.33333333%;
-  min-width: 58.33333333%;
+  min-width: 250px;
 }
 .grid.row .col.col-8,
 .grid .row .col.col-8 {
   width: 66.66666667%;
-  min-width: 66.66666667%;
+  min-width: 250px;
 }
 .grid.row .col.col-9,
 .grid .row .col.col-9 {
   width: 75%;
-  min-width: 75%;
+  min-width: 250px;
 }
 .grid.row .col.col-10,
 .grid .row .col.col-10 {
   width: 83.33333333%;
-  min-width: 83.33333333%;
+  min-width: 250px;
 }
 .grid.row .col.col-11,
 .grid .row .col.col-11 {
   width: 91.66666667%;
-  min-width: 91.66666667%;
+  min-width: 250px;
 }
 .grid.row .col.col-12,
 .grid .row .col.col-12 {
   width: 100%;
-  min-width: 100%;
+  min-width: 250px;
 }
 .grid-small-.row,
 .grid-small- .row {
@@ -582,62 +585,62 @@ a:hover {
 .grid-small-.row .col.col-1,
 .grid-small- .row .col.col-1 {
   width: 8.33333333%;
-  min-width: 8.33333333%;
+  min-width: 100px;
 }
 .grid-small-.row .col.col-2,
 .grid-small- .row .col.col-2 {
   width: 16.66666667%;
-  min-width: 16.66666667%;
+  min-width: 200px;
 }
 .grid-small-.row .col.col-3,
 .grid-small- .row .col.col-3 {
   width: 25%;
-  min-width: 25%;
+  min-width: 250px;
 }
 .grid-small-.row .col.col-4,
 .grid-small- .row .col.col-4 {
   width: 33.33333333%;
-  min-width: 33.33333333%;
+  min-width: 250px;
 }
 .grid-small-.row .col.col-5,
 .grid-small- .row .col.col-5 {
   width: 41.66666667%;
-  min-width: 41.66666667%;
+  min-width: 250px;
 }
 .grid-small-.row .col.col-6,
 .grid-small- .row .col.col-6 {
   width: 50%;
-  min-width: 50%;
+  min-width: 250px;
 }
 .grid-small-.row .col.col-7,
 .grid-small- .row .col.col-7 {
   width: 58.33333333%;
-  min-width: 58.33333333%;
+  min-width: 250px;
 }
 .grid-small-.row .col.col-8,
 .grid-small- .row .col.col-8 {
   width: 66.66666667%;
-  min-width: 66.66666667%;
+  min-width: 250px;
 }
 .grid-small-.row .col.col-9,
 .grid-small- .row .col.col-9 {
   width: 75%;
-  min-width: 75%;
+  min-width: 250px;
 }
 .grid-small-.row .col.col-10,
 .grid-small- .row .col.col-10 {
   width: 83.33333333%;
-  min-width: 83.33333333%;
+  min-width: 250px;
 }
 .grid-small-.row .col.col-11,
 .grid-small- .row .col.col-11 {
   width: 91.66666667%;
-  min-width: 91.66666667%;
+  min-width: 250px;
 }
 .grid-small-.row .col.col-12,
 .grid-small- .row .col.col-12 {
   width: 100%;
-  min-width: 100%;
+  min-width: 250px;
 }
 @font-face {
   font-family: 'octicons';
