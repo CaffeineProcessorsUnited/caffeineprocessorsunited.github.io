@@ -27,6 +27,7 @@ define(["require", "exports", "../sgl/sgl", "./incrand", "./pathfinder", "../sgl
         function AI(simulator, type) {
             this.spawned = false;
             this.findingPath = false;
+            this.chasePlayer = false;
             this.simulator = simulator;
             this.gameState = this.simulator.gameState;
             this.pathfinder = new pathfinder_1.Pathfinder(this, this.gameState);
@@ -148,6 +149,8 @@ define(["require", "exports", "../sgl/sgl", "./incrand", "./pathfinder", "../sgl
                 default:
                     throw new Error("Unknown AIType. Fix your shit!");
             }
+            this.reactionDelay *= 1.8;
+            this.maxSpeed *= 2;
             this.newSound();
             this.maxSpeed *= this.tileSize;
             this.sprite = this.gameState.layerManager.layer("npc").add(this.gameState.game.add.sprite(0, 0, spriteKey));
@@ -155,8 +158,23 @@ define(["require", "exports", "../sgl/sgl", "./incrand", "./pathfinder", "../sgl
             this.sprite.anchor.set(0.5);
             this.gameState.game.physics.enable(this.sprite);
             this.sprite.body.collideWorldBounds = true;
+            this.batterySprite = this.gameState.layerManager.layer("npc").add(this.gameState.game.add.sprite(0, 0, "indicatorbattery"));
+            this.batterySprite.anchor.set(0.5);
+            this.chasingSprite = this.gameState.layerManager.layer("npc").add(this.gameState.game.add.sprite(0, 0, "indicatorchasing"));
+            this.chasingSprite.anchor.set(0.5);
             this.player = this.gameState.ref("player", "player");
         }
+        Object.defineProperty(AI.prototype, "speed", {
+            get: function () {
+                return this._speed;
+            },
+            set: function (speed) {
+                this._speed = speed;
+                this.speedInTiles = speed / this.tileSize;
+            },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(AI.prototype, "reservedTile", {
             get: function () {
                 return this._reservedTile;
@@ -168,17 +186,6 @@ define(["require", "exports", "../sgl/sgl", "./incrand", "./pathfinder", "../sgl
                     this.reservedX = pos.x;
                     this.reservedY = pos.y;
                 }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(AI.prototype, "speed", {
-            get: function () {
-                return this._speed;
-            },
-            set: function (speed) {
-                this._speed = speed;
-                this.speedInTiles = speed / this.tileSize;
             },
             enumerable: true,
             configurable: true
@@ -224,7 +231,32 @@ define(["require", "exports", "../sgl/sgl", "./incrand", "./pathfinder", "../sgl
             enumerable: true,
             configurable: true
         });
+        AI.prototype.updateIndicators = function () {
+            var baseX = this.sprite.x;
+            if (this.canBeRobbed && this.state === AIState.CHASING && this.type !== AIType.VEHICLE) {
+                baseX -= 10;
+            }
+            if (this.canBeRobbed) {
+                this.batterySprite.position.x = baseX;
+                this.batterySprite.position.y = this.sprite.y - this.sprite.height / 2 - 10;
+                this.batterySprite.visible = true;
+            }
+            else {
+                this.batterySprite.position.x = -100;
+                this.batterySprite.visible = false;
+            }
+            if (this.chasePlayer) {
+                this.chasingSprite.position.x = baseX;
+                this.chasingSprite.position.y = this.sprite.y - this.sprite.height / 2 - 10;
+                this.chasingSprite.visible = true;
+            }
+            else {
+                this.chasingSprite.position.x = -100;
+                this.chasingSprite.visible = false;
+            }
+        };
         AI.prototype.update = function () {
+            this.updateIndicators();
             if (this.state === AIState.SITTING) {
                 if (this.goHome.getRand()) {
                     sgl_1.log("STANDUP");
@@ -238,10 +270,7 @@ define(["require", "exports", "../sgl/sgl", "./incrand", "./pathfinder", "../sgl
             }
             this.pathfinder.setCurrent(this.position);
             this.sound();
-            if (this.findingPath) {
-                return;
-            }
-            if (this.state === AIState.CHASING) {
+            if (this.chasePlayer) {
                 if (this.plannedPoints.length > this.maxWalkDistance) {
                     this.setStroll();
                 }
@@ -249,6 +278,7 @@ define(["require", "exports", "../sgl/sgl", "./incrand", "./pathfinder", "../sgl
                     sgl_1.log("CLUB");
                     this.giveUp.reset();
                     this.canBeRobbed = true;
+                    this.chasePlayer = false;
                     if (this.type === AIType.VEHICLE) {
                         this.gameState.clubPlayer(40 + this.device);
                     }
@@ -260,6 +290,7 @@ define(["require", "exports", "../sgl/sgl", "./incrand", "./pathfinder", "../sgl
                 }
                 if (this.giveUp.getRand()) {
                     this.setStroll();
+                    this.chasePlayer = false;
                 }
                 if (this.speedUp.getRand()) {
                     this.speed += 0.1 * (Math.random() * 2 - 1);
@@ -434,18 +465,19 @@ define(["require", "exports", "../sgl/sgl", "./incrand", "./pathfinder", "../sgl
             }
         };
         AI.prototype.pickPocket = function () {
-            if (!this.canBeRobbed && this.type !== AIType.GUARD) {
-                return;
-            }
-            var rand = Math.random() * 100;
-            if (rand < this.alert) {
-                var dx = this.position.x - this.gameState.currentTile.worldX;
-                var dy = this.position.y - this.gameState.currentTile.worldY;
-                if (dx * dx + dy * dy < this.alertRadSq * this.gameState.map.tileWidth * this.gameState.map.tileWidth) {
+            var dx = this.position.x - this.gameState.currentTile.worldX;
+            var dy = this.position.y - this.gameState.currentTile.worldY;
+            if (this.canBeRobbed) {
+                if (dx * dx + dy * dy < this.tileSize * this.tileSize) {
                     this.canBeRobbed = false;
                     if (this.type !== AIType.GUARD) {
                         this.gameState.pickUp(this.device);
                     }
+                }
+            }
+            var rand = Math.random() * 100;
+            if (rand < this.alert) {
+                if (dx * dx + dy * dy < this.alertRadSq * this.gameState.map.tileWidth * this.gameState.map.tileWidth) {
                     this.setChasing();
                 }
             }
@@ -467,7 +499,6 @@ define(["require", "exports", "../sgl/sgl", "./incrand", "./pathfinder", "../sgl
         };
         AI.prototype.setChasing = function () {
             this.speed = 0;
-            this.state = AIState.CHASING;
             this.doChase(this.reactionDelay);
         };
         AI.prototype.nearTarget = function () {
@@ -519,13 +550,12 @@ define(["require", "exports", "../sgl/sgl", "./incrand", "./pathfinder", "../sgl
         };
         AI.prototype.clearTimeout = function () {
             if (this.timeout !== undefined) {
-                clearTimeout(this.timeout);
             }
         };
         AI.prototype.async = function (func, delta) {
             var _this = this;
             this.clearTimeout();
-            this.timeout = window.setTimeout(function () {
+            window.setTimeout(function () {
                 _this.timeout = undefined;
                 func();
             }, delta);
@@ -558,9 +588,8 @@ define(["require", "exports", "../sgl/sgl", "./incrand", "./pathfinder", "../sgl
             return true;
         };
         AI.prototype.onPlayerMove = function (pos) {
-            if (this.state === AIState.CHASING) {
+            if (this.chasePlayer) {
                 this.setTarget(pos.x, pos.y);
-                this.pathfinder.setTarget(pos);
             }
         };
         AI.prototype.newTargets = function (pos, done) {
@@ -628,9 +657,13 @@ define(["require", "exports", "../sgl/sgl", "./incrand", "./pathfinder", "../sgl
         AI.prototype.doChase = function (delay) {
             var _this = this;
             this.async(function () {
+                console.log("START CHASE");
+                _this.forcePathUpdate();
                 _this.speed = _this.maxSpeed;
                 _this.giveUp.reset();
                 _this.speedUp.reset();
+                _this.chasePlayer = true;
+                _this.forcePathUpdate();
             }, delay * 1000);
         };
         AI.prototype.doStroll = function (delay) {
@@ -638,8 +671,16 @@ define(["require", "exports", "../sgl/sgl", "./incrand", "./pathfinder", "../sgl
             this.async(function () {
                 _this.state = AIState.STROLL;
                 _this.speed = (0.5 + 0.1 * Math.random()) * _this.maxSpeed;
-                while (!_this.setTarget(_this.position.x + Math.round(Math.random() * 10 - 5) * _this.tileSize / 2, _this.position.y + Math.round(Math.random() * 10 - 5) * _this.tileSize / 2)) {
-                    console.log("Cannot find suitable location for stroll");
+                var ok = false;
+                for (var _i = 0, _a = util_1.range(0, 100); _i < _a.length; _i++) {
+                    var i = _a[_i];
+                    if (_this.setTarget(_this.position.x + Math.round(Math.random() * 10 - 5) * _this.tileSize / 2, _this.position.y + Math.round(Math.random() * 10 - 5) * _this.tileSize / 2)) {
+                        ok = true;
+                        break;
+                    }
+                }
+                if (!ok) {
+                    console.log("CANNOT FIND SUITABLE LOCATION FOR STROLL");
                 }
             }, delay * 1000);
         };

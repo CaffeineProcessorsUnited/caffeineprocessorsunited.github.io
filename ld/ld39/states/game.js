@@ -22,7 +22,7 @@ define(["require", "exports", "../sgl/sgl", "../classes/trigger", "../classes/ai
         __extends(GameState, _super);
         function GameState() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.energyLossPerSecond = 0.5;
+            _this.energyLossPerSecond = 1;
             _this.layers = {};
             _this.zoom = 1;
             _this.triggers = [];
@@ -68,6 +68,8 @@ define(["require", "exports", "../sgl/sgl", "../classes/trigger", "../classes/ai
                 _this.game.load.spritesheet("student1", "assets/human/player_tilesheet.png", 80, 110);
                 _this.game.load.spritesheet("guard", "assets/human/soldier_tilesheet.png", 80, 110);
                 _this.game.load.spritesheet("prof", "assets/human/zombie_tilesheet.png", 80, 110);
+                _this.game.load.image("indicatorbattery", "assets/indicator_battery.png");
+                _this.game.load.image("indicatorchasing", "assets/indicator_chasing.png");
                 util_1.range(0, 3).forEach(function (i) {
                     _this.loader.game.load.spritesheet("car" + i, "assets/car/car" + i + ".png", 144, 144);
                 });
@@ -92,18 +94,20 @@ define(["require", "exports", "../sgl/sgl", "../classes/trigger", "../classes/ai
                 _this.game.forceSingleUpdate = true;
             };
             _this._update = function () {
+                if (_this.energyReserve <= 0) {
+                    _this.gameOver();
+                    window.location.href = "./gameover.html";
+                }
                 _this.currentTile = _this.getCurrentTile();
                 _this.game.physics.arcade.collide(_this.ref("player", "player"), _this.layers["ground"]);
-                if (!_this.sprinting) {
-                    _this.game.physics.arcade.collide(_this.ref("player", "player"), _this.layers["collision"]);
-                }
+                _this.game.physics.arcade.collide(_this.ref("player", "player"), _this.layers["collision"]);
                 _this.energyReserve -= _this.energyLossPerSecond * _this.game.time.elapsedMS / 1000.;
                 var damping = 100;
-                var max = 200;
-                var rate = 80;
+                var max = 80;
+                var rate = 30;
                 if (_this.sprinting) {
-                    max = 400;
-                    rate = 100;
+                    max = 130;
+                    rate = 40;
                 }
                 if (_this.ref("player", "player").body.velocity.x >= max) {
                     _this.ref("player", "player").body.velocity.x = max;
@@ -182,16 +186,6 @@ define(["require", "exports", "../sgl/sgl", "../classes/trigger", "../classes/ai
                 _this.trigger();
                 _this.lastTile = _this.currentTile;
                 _this.simulator.update();
-                _this.game.debug.text("Energy remaining: " + _this.energyReserve, 30, 115);
-                _this.game.debug.text("CurrentTile: x:" + _this.lastTile.x + ", y:" + _this.lastTile.y + ", layers:", 30, 135);
-                var line = 155;
-                _this.map.layers.forEach(function (_, lid) {
-                    var tile = _this.map.getTile(_this.lastTile.x, _this.lastTile.y, lid);
-                    if (tile != null) {
-                        _this.game.debug.text("    id: " + tile.index + ", layer: " + tile.layer.name, 30, line);
-                        line += 20;
-                    }
-                });
                 var batled = window.document.getElementById("led2");
                 if (_this.energyReserve <= 0) {
                     batled.style.fill = "#cccccc";
@@ -203,11 +197,11 @@ define(["require", "exports", "../sgl/sgl", "../classes/trigger", "../classes/ai
                     window.document.getElementById("led4").style.animationDuration = "0s";
                     _this.gameOver();
                 }
-                else if (_this.energyReserve < 10) {
+                else if (_this.energyReserve < 20) {
                     batled.style.animationName = "blink-red";
                     batled.style.animationDuration = "1s";
                 }
-                else if (_this.energyReserve < 20) {
+                else if (_this.energyReserve < 30) {
                     batled.style.fill = "orange";
                     batled.style.animationDuration = "0s";
                 }
@@ -404,8 +398,9 @@ define(["require", "exports", "../sgl/sgl", "../classes/trigger", "../classes/ai
             sgl_1.log("A quest?");
         };
         GameState.prototype.gameOver = function () {
-            this.shutdown();
             this.changeState("end");
+            this.shutdown();
+            sgl_1.log("GAME OVER");
         };
         GameState.prototype.clubPlayer = function (amount) {
             this.energyReserve -= amount;
@@ -716,7 +711,7 @@ define(["require", "exports", "../sgl/sgl", "../classes/trigger", "../classes/ai
             }
         };
         GameState.prototype.pickUp = function (device) {
-            this.energyReserve += device;
+            this.energyReserve = Math.min(100, this.energyReserve + device);
         };
         GameState.prototype.updateWalkingSound = function () {
             var playing = false;

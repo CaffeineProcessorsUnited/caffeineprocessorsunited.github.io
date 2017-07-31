@@ -15,7 +15,7 @@ define(["require", "exports", "../sgl/sgl"], function (require, exports, sgl_1) 
         __extends(MenuState, _super);
         function MenuState() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.ready = true;
+            _this.ready = false;
             _this.booted = false;
             _this.keys = [];
             _this.margin = 20;
@@ -123,10 +123,12 @@ define(["require", "exports", "../sgl/sgl"], function (require, exports, sgl_1) 
                     _this.keys.push(_this.game.add.audio("key" + i));
                     _this.keys[i].allowMultiple = true;
                 });
-                _this.game.add.audio("drive").play();
+                _this.drive = _this.game.add.audio("drive");
+                _this.drive.play();
             };
             _this._update = function () {
                 if (_this.ready) {
+                    _this.drive.stop();
                     _this.changeState("game");
                 }
                 sgl_1.log(_this.debugCount, _this.currentText);
